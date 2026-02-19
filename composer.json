@@ -76,8 +76,6 @@
         "spatie/laravel-translatable": "6.5.1",
         "spatie/valuestore": "^1.2",
         "spondonit/ar-php": "^1.0",
-        "spondonit/lms-service": "^2.0",
-        "spondonit/mobilpay": "^1.0",
         "stevebauman/location": "^6.3",
         "toshy/bunnynet-php": "^3.3",
         "unicodeveloper/laravel-paystack": "^1.0",
