@@ -1,0 +1,16 @@
+[phases.setup]
+nixPkgs = ["...", "php81", "php81Extensions.pdo_mysql", "php81Extensions.redis", "php81Extensions.gd", "php81Extensions.mbstring", "php81Extensions.xml", "php81Extensions.zip", "php81Extensions.curl", "php81Extensions.fileinfo", "php81Extensions.openssl", "php81Extensions.intl", "php81Extensions.bcmath", "php81Extensions.exif", "php81Extensions.ctype", "php81Extensions.tokenizer", "php81Extensions.json", "nginx", "nodejs", "npm"]
+
+[phases.build]
+cmds = [
+    "composer install --no-dev --optimize-autoloader --no-interaction",
+    "npm ci",
+    "npm run production",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache",
+    "php artisan event:cache"
+]
+
+[start]
+cmd = "/app/start.sh"

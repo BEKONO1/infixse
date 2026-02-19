@@ -1,0 +1,69 @@
+# Git & Environment
+.git
+.gitignore
+.env
+.env.local
+.env.development
+.env.production
+README.md
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Testing
+phpunit.xml
+phpunit.xml.dist
+/tests
+/coverage
+.phpunit.result.cache
+
+# Node modules (will be installed during build)
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Storage (will be mounted as volume)
+/storage/app/public/*
+!/storage/app/public/.gitignore
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Temporary files
+*.log
+*.cache
+.DS_Store
+Thumbs.db
+
+# Documentation
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Docker (if exists)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Railway config (already included)
+railway.json
+nixpacks.toml
+start.sh
+nginx.conf
+.env.railway
