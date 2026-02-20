@@ -67,4 +67,4 @@ RUN mkdir -p /var/run/php && chown www-data:www-data /var/run/php
 
 EXPOSE 80
 
-CMD service php8.4-fpm start && nginx -g "daemon off;"
+CMD php-fpm -D && nginx -g "daemon off;"
