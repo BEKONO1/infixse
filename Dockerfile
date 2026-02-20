@@ -6,8 +6,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libicu-dev \
     libxml2-dev \
     libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     unzip \
-    && docker-php-ext-configure zip --with-libzip \
     && docker-php-ext-install \
       intl \
       pdo_mysql \
