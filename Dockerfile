@@ -1,13 +1,4 @@
-FROM php:8.4-apache
-
-# Désactiver TOUS les MPM modules avant toute chose
-RUN set -ex; \
-    rm -rf /etc/apache2/mods-available/mpm_*; \
-    rm -rf /etc/apache2/mods-enabled/mpm_*; \
-    apt-get update && apt-get install -y --no-install-recommends \
-        apache2-mpm-prefork \
-    && rm -rf /var/lib/apt/lists/*; \
-    a2enmod mpm_prefork rewrite
+FROM php:8.4-fpm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -21,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libonig-dev \
     libcurl4-openssl-dev \
     unzip \
+    nginx \
     && docker-php-ext-install \
       intl \
       pdo_mysql \
@@ -46,12 +38,33 @@ RUN if [ ! -f .env ]; then \
     fi \
     && php artisan key:generate --force \
     && chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+    && chown -R www-data:www-data storage bootstrap/cache /var/www/html
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's|<Directory "/var/www/html">|<Directory "/var/www/html/public">|' /etc/apache2/sites-available/000-default.conf \
-    && chown -R www-data:www-data /var/www/html
+COPY <<'EOF' /etc/nginx/sites-available/default
+server {
+    listen 80;
+    server_name _;
+    root /var/www/html/public;
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+EOF
+
+RUN mkdir -p /var/run/php && chown www-data:www-data /var/run/php
 
 EXPOSE 80
-CMD ["apache2-foreground"]
+
+CMD service php8.4-fpm start && nginx -g "daemon off;"
