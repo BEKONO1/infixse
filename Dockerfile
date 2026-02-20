@@ -1,7 +1,13 @@
 FROM php:8.4-apache
 
-RUN rm -f /etc/apache2/mods-enabled/mpm_* \
-    && a2enmod mpm_prefork rewrite
+# Désactiver TOUS les MPM modules avant toute chose
+RUN set -ex; \
+    rm -rf /etc/apache2/mods-available/mpm_*; \
+    rm -rf /etc/apache2/mods-enabled/mpm_*; \
+    apt-get update && apt-get install -y --no-install-recommends \
+        apache2-mpm-prefork \
+    && rm -rf /var/lib/apt/lists/*; \
+    a2enmod mpm_prefork rewrite
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
