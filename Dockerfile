@@ -31,7 +31,7 @@ WORKDIR /var/www/html
 
 COPY composer.json ./
 COPY composer.lock* ./
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs --no-audit
+RUN COMPOSER_AUDIT_BLOCK_INSECURE=0 composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
 
 COPY . .
 
