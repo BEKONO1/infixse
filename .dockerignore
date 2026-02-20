@@ -1,0 +1,12 @@
+vendor/
+node_modules/
+vendor-cache/
+.env
+.env.*
+vendor/.cache/
+tmp/
+.git
+.github
+README.md
+Dockerfile
+docker-compose.yml
