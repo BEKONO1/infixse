@@ -22,10 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd \
-    && a2enmod rewrite \
-    && a2dismod mpm_event \
-    && a2enmod mpm_prefork \
     && rm -rf /var/lib/apt/lists/*
+
+RUN a2dismod mpm_event && a2enmod mpm_prefork rewrite
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
