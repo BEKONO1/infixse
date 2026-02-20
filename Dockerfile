@@ -33,6 +33,13 @@ COPY . .
 
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs --no-security-blocking
 
+RUN if [ ! -f .env ]; then \
+        cp .env.example .env 2>/dev/null || echo "APP_NAME=Laravel\nAPP_ENV=local\nAPP_KEY=\nAPP_DEBUG=true\nAPP_URL=http://localhost" > .env; \
+    fi \
+    && php artisan key:generate --force \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's|<Directory "/var/www/html">|<Directory "/var/www/html/public">|' /etc/apache2/sites-available/000-default.conf \
